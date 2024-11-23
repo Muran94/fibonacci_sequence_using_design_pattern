@@ -3,11 +3,17 @@
 require 'spec_helper'
 
 RSpec.describe FibonacciNumbers do
-  describe 'FIRST_TWO_NUMBERS' do
-    it 'フィボナッチ数列における、最初の二つの数値を持つ配列が返ってくること。また、freezeされていること。' do
-      # matchマッチャーを使用すると、オブジェクトIDが一致しているかかどうか検証し、テストに失敗してしまうため、数値に変換して比較する。
-      expect(FibonacciNumbers::FIRST_TWO_NUMBERS.map(&:to_i)).to match [FibonacciNumber.new(0).to_i, FibonacciNumber.new(1).to_i]
-      expect(FibonacciNumbers::FIRST_TWO_NUMBERS).to be_frozen
+  describe 'FIRST_TERM' do
+    it 'フィボナッチ数列における、第1項の数値を表す、FibonacciNumberのオブジェクトが返ってくること。また、freezeされていること。' do
+      expect(FibonacciNumbers::FIRST_TERM).to eq FibonacciNumber.new(0)
+      expect(FibonacciNumbers::FIRST_TERM).to be_frozen
+    end
+  end
+
+  describe 'SECOND_TERM' do
+    it 'フィボナッチ数列における、第2項の数値を表す、FibonacciNumberのオブジェクトが返ってくること。また、freezeされていること。' do
+      expect(FibonacciNumbers::SECOND_TERM).to eq FibonacciNumber.new(1)
+      expect(FibonacciNumbers::SECOND_TERM).to be_frozen
     end
   end
 
@@ -31,7 +37,7 @@ RSpec.describe FibonacciNumbers do
     end
   end
 
-  describe '.generate' do
+  describe '.generate(length: 2)' do
     context '引数に正常値が渡された場合' do
       it '指定の個数の要素を@collectionに持つ、FibonacciNumbersクラスのインスタンスが返ってくること。' do
         fibonacci_sequence = FibonacciNumbers.generate(length: 2)
@@ -48,9 +54,9 @@ RSpec.describe FibonacciNumbers do
 
     context '引数に異常値が渡された場合' do
       it 'ArgumentErrorがraiseされること。' do
-        expect { FibonacciNumbers.generate(length: nil) }.to raise_error ArgumentError, 'Argument `length` is required.'
-        expect { FibonacciNumbers.generate(length: '1') }.to raise_error ArgumentError, 'Argument `length` must be an instance of Integer class.'
-        expect { FibonacciNumbers.generate(length: -10) }.to raise_error ArgumentError, 'Argument `length` must be greater or equal to 2.'
+        expect { FibonacciNumbers.generate(length: nil) }.to raise_error ArgumentError, 'Argument `value` is required.'
+        expect { FibonacciNumbers.generate(length: '1') }.to raise_error ArgumentError, 'Argument `value` must be an instance of Integer class.'
+        expect { FibonacciNumbers.generate(length: -10) }.to raise_error ArgumentError, 'Argument `value` must be greater or equal to 2.'
       end
     end
   end
@@ -88,15 +94,24 @@ RSpec.describe FibonacciNumbers do
     end
   end
 
-  describe 'add_until_length_reaches' do
+  describe '#add_until_length_reaches' do
     it 'メソッドを実行する前後の個数が正しいこと。' do
       fibonacci_numbers = FibonacciNumbers.generate(length: 2)
 
       expect(fibonacci_numbers.length).to eq 2
+      expect(fibonacci_numbers.to_a).to eq [0, 1]
 
       fibonacci_numbers_with_added_values = fibonacci_numbers.add_until_length_reaches(10)
 
       expect(fibonacci_numbers_with_added_values.length).to eq 10
+      expect(fibonacci_numbers_with_added_values.to_a).to eq [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+    end
+  end
+
+  describe '#length' do
+    it '@collectionの要素数を返すこと。' do
+      expect(FibonacciNumbers.generate(length: 2).length).to eq 2
+      expect(FibonacciNumbers.generate(length: 5).length).to eq 5
     end
   end
 

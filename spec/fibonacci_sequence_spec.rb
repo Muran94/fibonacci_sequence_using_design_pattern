@@ -13,7 +13,7 @@ RSpec.describe FibonacciSequence do
     end
   end
 
-  describe '.generate' do
+  describe '.generate(length: 2)' do
     context '引数に正常値が渡された場合' do
       it '指定の長さの要素を持つ@fibonacci_numbersをインスタンス変数に持つ、FibonacciSequenceクラスのインスタンスが返ってくること。' do
         fibonacci_sequence = FibonacciSequence.generate(length: 2)
@@ -30,9 +30,9 @@ RSpec.describe FibonacciSequence do
 
     context '引数に異常値が渡された場合' do
       it 'ArgumentErrorがraiseされること。' do
-        expect { FibonacciSequence.generate(length: nil) }.to raise_error ArgumentError, 'Argument `length` is required.'
-        expect { FibonacciSequence.generate(length: '1') }.to raise_error ArgumentError, 'Argument `length` must be an instance of Integer class.'
-        expect { FibonacciSequence.generate(length: -10) }.to raise_error ArgumentError, 'Argument `length` must be greater or equal to 2.'
+        expect { FibonacciSequence.generate(length: nil) }.to raise_error ArgumentError, 'Argument `value` is required.'
+        expect { FibonacciSequence.generate(length: '1') }.to raise_error ArgumentError, 'Argument `value` must be an instance of Integer class.'
+        expect { FibonacciSequence.generate(length: -10) }.to raise_error ArgumentError, 'Argument `value` must be greater or equal to 2.'
       end
     end
   end
@@ -47,17 +47,15 @@ RSpec.describe FibonacciSequence do
 
   describe '#to_a' do
     it 'フィボナッチ数列の要素を配列にして返す。' do
-      fibonacci_sequence = FibonacciSequence.generate(length: 5)
-
-      expect(fibonacci_sequence.to_a).to eq [0, 1, 1, 2, 3]
+      expect(FibonacciSequence.generate(length: 2).to_a).to eq [0, 1]
+      expect(FibonacciSequence.generate(length: 5).to_a).to eq [0, 1, 1, 2, 3]
     end
   end
 
   describe '#to_s' do
     it 'フィボナッチ数列を構成する数字を、「, 」区切りで連結して、文字列として返すこと。' do
-      fibonacci_sequence = FibonacciSequence.generate(length: 5)
-
-      expect(fibonacci_sequence.to_s).to eq '0, 1, 1, 2, 3'
+      expect(FibonacciSequence.generate(length: 2).to_s).to eq '0, 1'
+      expect(FibonacciSequence.generate(length: 5).to_s).to eq '0, 1, 1, 2, 3'
     end
   end
 end

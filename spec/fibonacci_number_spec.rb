@@ -24,13 +24,20 @@ RSpec.describe FibonacciNumber do
     end
   end
 
-  describe('#to_i') do
+  describe '#to_i' do
     it '@valueの値を返すこと。' do
       expect(FibonacciNumber.new(0).to_i).to eq 0
       expect(FibonacciNumber.new(1).to_i).to eq 1
       expect(FibonacciNumber.new(2).to_i).to eq 2
       expect(FibonacciNumber.new(3).to_i).to eq 3
       expect(FibonacciNumber.new(5).to_i).to eq 5
+    end
+  end
+
+  describe '#==' do
+    it 'もう一つのFibonacciNumberのvalueと値が同じであればtrue、そうでなければfalseを返す。' do
+      expect(FibonacciNumber.new(0) == FibonacciNumber.new(0)).to be_truthy
+      expect(FibonacciNumber.new(0) == FibonacciNumber.new(1)).not_to eq be_falsy
     end
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# フィボナッチ数を表すクラス
+# フィボナッチ数列の長さを表すクラス
 #
 # 1. 疎結合高凝集
 # → 確実に正常なデータを持つインスタンスを生成することで、そのデータを扱うインスタンスメソッド内で、エラーが発生する確率を下げることができる。
@@ -16,12 +16,12 @@
 # → 「レッド、グリーン、リファクタリング」のステップに分けて自動テストを実装することで、コードの品質を担保している。
 # → また、テスト駆動開発によって、クラスのインターフェイスの「扱いやすさ」を検証しながら実装ができるため、インターフェイスの品質をある程度担保できるのもポイント。
 #
-class FibonacciNumber
+class FibonacciSequenceLength
   # 1. カプセル化
   # → 必要なデータや、手続きのみを外部に公開することで、必要以上に、モジュール間同士の結合度を上げないようにしている。
-  # → インスタンス変数@valueを読み取るためのゲッターメソッドを定義しているが、外部から参照する必要がないため、protectedとして定義している。
+  # → インスタンス変数@numberを読み取るためのゲッターメソッドを定義しているが、外部から参照する必要がないため、privateとして定義している。
   #
-  protected attr_reader :value
+  private attr_reader :value
 
   # 1. 完全コンストラクタ
   # → 確実に正常なデータを持つインスタンスを生成することで、そのデータを扱うインスタンスメソッド内で、エラーが発生する確率を下げることができる。
@@ -37,25 +37,14 @@ class FibonacciNumber
   def initialize(value)
     raise ArgumentError, 'Argument `value` is required.'                          if value.nil?
     raise ArgumentError, 'Argument `value` must be an instance of Integer class.' unless value.is_a?(Integer)
-    raise ArgumentError, 'Argument `value` must be greater or equal to 0.'        unless value >= 0
+    raise ArgumentError, 'Argument `value` must be greater or equal to 2.'        unless value >= 2
 
     @value = value
 
     freeze
   end
 
-  # 1. 目的駆動命名
-  # → 目的を表す命名にすることによって、プログラムの意図が明確になり、可読性が大きく向上する。
-  #
   def to_i
     value
   end
-
-  def ==(other)
-    value == other.value
-  end
 end
-
-# その他
-#
-# 1. 値オブジェクト同士の等値チェックメソッドのオーバーライド。
