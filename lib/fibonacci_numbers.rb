@@ -2,6 +2,7 @@
 
 require_relative './fibonacci_number'
 require_relative './fibonacci_sequence_length'
+require_relative './invalid_attribute_error'
 
 # フィボナッチ数列を構成するフィボナッチ数のコレクションを管理するためのクラス。
 #
@@ -25,7 +26,7 @@ class FibonacciNumbers
 
   # 1. 完全コンストラクタ
   # → 確実に正常なデータを持つインスタンスを生成することで、そのデータを扱うインスタンスメソッド内で、エラーが発生する確率を下げることができる。
-  # → 今回は、コンストラクタ上部に、不正値を検知する仕組みを設け、不正値であった場合に例外を発生させている。
+  # → 一度インスタンス変数に引数の値をセットした上で、validate_attributes!メソッドでデータをチェックし、異常があれば例外を投げることで、
   # → 後続のプログラムが実行されず、不正なインスタンスが生成されるのを防ぐことができる。
   # → その他、例外を発生させる際には、適したクラスとメッセージを指定することで、デバッグが容易になるよう工夫している。
   #
@@ -35,11 +36,9 @@ class FibonacciNumbers
   # → なお、パフォーマンスに問題がある場合等、「可変オブジェクト」として定義した方が適しているケースがある点に注意。
   #
   def initialize(collection = [FibonacciNumbers::FIRST_TERM, FibonacciNumbers::SECOND_TERM])
-    raise ArgumentError, 'Argument `collection` is required.'                                                           if collection.nil?
-    raise ArgumentError, 'Argument `collection` must be an instance of Array Class, including FibonacciNumber Objects.' unless collection.is_a?(Array) && collection.all? { |fibonacci_number| fibonacci_number.is_a?(FibonacciNumber) }
-    raise ArgumentError, 'Argument `collection` must contain 0 and 1 for the first two elements.'                       unless collection.first(2) == [FibonacciNumbers::FIRST_TERM, FibonacciNumbers::SECOND_TERM]
-
     @collection = collection
+
+    validate_attributes!
 
     freeze
   end
@@ -79,6 +78,18 @@ class FibonacciNumbers
 
   def to_a
     collection.dup.map(&:to_i)
+  end
+
+  private
+
+  def validate_attributes!
+    validate_collection!
+  end
+
+  def validate_collection!
+    raise InvalidAttributeError, 'Attribute `collection` is required.'                                                           if collection.nil?
+    raise InvalidAttributeError, 'Attribute `collection` must be an instance of Array Class, including FibonacciNumber Objects.' unless collection.is_a?(Array) && collection.all? { |fibonacci_number| fibonacci_number.is_a?(FibonacciNumber) }
+    raise InvalidAttributeError, 'Attribute `collection` must contain 0 and 1 for the first two elements.'                       unless collection.first(2) == [FibonacciNumbers::FIRST_TERM, FibonacciNumbers::SECOND_TERM]
   end
 end
 

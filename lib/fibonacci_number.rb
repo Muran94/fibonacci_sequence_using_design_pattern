@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative './invalid_attribute_error'
+
 # フィボナッチ数を表すクラス
 #
 # 1. 疎結合高凝集
@@ -25,7 +27,7 @@ class FibonacciNumber
 
   # 1. 完全コンストラクタ
   # → 確実に正常なデータを持つインスタンスを生成することで、そのデータを扱うインスタンスメソッド内で、エラーが発生する確率を下げることができる。
-  # → 今回は、コンストラクタ上部に、不正値を検知する仕組みを設け、不正値であった場合に例外を発生させている。
+  # → 一度インスタンス変数に引数の値をセットした上で、validate_attributes!メソッドでデータをチェックし、異常があれば例外を投げることで、
   # → 後続のプログラムが実行されず、不正なインスタンスが生成されるのを防ぐことができる。
   # → その他、例外を発生させる際には、適したクラスとメッセージを指定することで、デバッグが容易になるよう工夫している。
   #
@@ -35,11 +37,9 @@ class FibonacciNumber
   # → なお、パフォーマンスに問題がある場合等、「可変オブジェクト」として定義した方が適しているケースがある点に注意。
   #
   def initialize(value)
-    raise ArgumentError, 'Argument `value` is required.'                          if value.nil?
-    raise ArgumentError, 'Argument `value` must be an instance of Integer class.' unless value.is_a?(Integer)
-    raise ArgumentError, 'Argument `value` must be greater or equal to 0.'        unless value >= 0
-
     @value = value
+
+    validate_attributes!
 
     freeze
   end
@@ -53,6 +53,18 @@ class FibonacciNumber
 
   def ==(other)
     value == other.value
+  end
+
+  private
+
+  def validate_attributes!
+    validate_value!
+  end
+
+  def validate_value!
+    raise InvalidAttributeError, 'Attribute `value` is required.'                          if value.nil?
+    raise InvalidAttributeError, 'Attribute `value` must be an instance of Integer class.' unless value.is_a?(Integer)
+    raise InvalidAttributeError, 'Attribute `value` must be greater or equal to 0.'        unless value >= 0
   end
 end
 

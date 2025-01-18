@@ -17,9 +17,9 @@ RSpec.describe FibonacciNumber do
 
     context '引数に異常値が渡された場合' do
       it 'ArgumentErrorがraiseされること。' do
-        expect { FibonacciNumber.new(nil) }.to raise_error ArgumentError, 'Argument `value` is required.'
-        expect { FibonacciNumber.new('1') }.to raise_error ArgumentError, 'Argument `value` must be an instance of Integer class.'
-        expect { FibonacciNumber.new(-1)  }.to raise_error ArgumentError, 'Argument `value` must be greater or equal to 0.'
+        expect { FibonacciNumber.new(nil) }.to raise_error InvalidAttributeError, 'Attribute `value` is required.'
+        expect { FibonacciNumber.new('1') }.to raise_error InvalidAttributeError, 'Attribute `value` must be an instance of Integer class.'
+        expect { FibonacciNumber.new(-1)  }.to raise_error InvalidAttributeError, 'Attribute `value` must be greater or equal to 0.'
       end
     end
   end

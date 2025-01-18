@@ -30,9 +30,9 @@ RSpec.describe FibonacciSequence do
 
     context '引数に異常値が渡された場合' do
       it 'ArgumentErrorがraiseされること。' do
-        expect { FibonacciSequence.generate(length: nil) }.to raise_error ArgumentError, 'Argument `value` is required.'
-        expect { FibonacciSequence.generate(length: '1') }.to raise_error ArgumentError, 'Argument `value` must be an instance of Integer class.'
-        expect { FibonacciSequence.generate(length: -10) }.to raise_error ArgumentError, 'Argument `value` must be greater or equal to 2.'
+        expect { FibonacciSequence.generate(length: nil) }.to raise_error InvalidAttributeError, 'Attribute `value` is required.'
+        expect { FibonacciSequence.generate(length: '1') }.to raise_error InvalidAttributeError, 'Attribute `value` must be an instance of Integer class.'
+        expect { FibonacciSequence.generate(length: -10) }.to raise_error InvalidAttributeError, 'Attribute `value` must be greater or equal to 2.'
       end
     end
   end

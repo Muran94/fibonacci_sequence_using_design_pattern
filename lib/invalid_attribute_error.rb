@@ -1,0 +1,2 @@
+class InvalidAttributeError < StandardError
+end

@@ -2,6 +2,7 @@
 
 require_relative './fibonacci_numbers'
 require_relative './fibonacci_sequence_length'
+require_relative './invalid_attribute_error'
 
 # フィボナッチ数列を表すクラス
 #
@@ -26,7 +27,7 @@ class FibonacciSequence
 
   # 1. 完全コンストラクタ
   # → 確実に正常なデータを持つインスタンスを生成することで、そのデータを扱うインスタンスメソッド内で、エラーが発生する確率を下げることができる。
-  # → 今回は、コンストラクタ上部に、不正値を検知する仕組みを設け、不正値であった場合に例外を発生させている。
+  # → 一度インスタンス変数に引数の値をセットした上で、validate_attributes!メソッドでデータをチェックし、異常があれば例外を投げることで、
   # → 後続のプログラムが実行されず、不正なインスタンスが生成されるのを防ぐことができる。
   # → その他、例外を発生させる際には、適したクラスとメッセージを指定することで、デバッグが容易になるよう工夫している。
   #
@@ -36,10 +37,9 @@ class FibonacciSequence
   # → なお、パフォーマンスに問題がある場合等、「可変オブジェクト」として定義した方が適しているケースがある点に注意。
   #
   def initialize(fibonacci_numbers = FibonacciNumbers.new)
-    raise ArgumentError, 'Argument `fibonacci_numbers` is required.'                                   if fibonacci_numbers.nil?
-    raise ArgumentError, 'Argument `fibonacci_numbers` must be an instance of FibonacciNumbers class.' unless fibonacci_numbers.is_a?(FibonacciNumbers)
-
     @fibonacci_numbers = fibonacci_numbers
+
+    validate_attributes!
 
     freeze
   end
@@ -61,6 +61,17 @@ class FibonacciSequence
 
   def to_s
     to_a.join(', ')
+  end
+
+  private
+
+  def validate_attributes!
+    validate_fibonacci_numbers!
+  end
+
+  def validate_fibonacci_numbers!
+    raise InvalidAttributeError, 'Attribute `fibonacci_numbers` is required.'                                   if fibonacci_numbers.nil?
+    raise InvalidAttributeError, 'Attribute `fibonacci_numbers` must be an instance of FibonacciNumbers class.' unless fibonacci_numbers.is_a?(FibonacciNumbers)
   end
 end
 
